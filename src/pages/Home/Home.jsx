@@ -1,6 +1,7 @@
 import React, { useContext, useState,useEffect } from 'react'
 import './Home.css'
 import { CoinContext } from '../../context/Context';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     const {allCoin,currency}=useContext(CoinContext);
@@ -32,7 +33,12 @@ const Home = () => {
             <h1>Largest <br/> Crypto Marketplace</h1>
             <p>Welcome to the world's largest cryptocurrency marketplace. Sign up to explore more about cryptos</p>
             <form onSubmit={searchHandler}>
-                <input  onChange={inputHandler} text="text" value={input} placeholder='Search Crypto..' required></input>
+                <input  onChange={inputHandler} list='coinlist' text="text" value={input} placeholder='Search Crypto..' required></input>
+
+                <datalist id='coinlist'>
+                    {allCoin.map((item,index)=>(<option key={index} value={item.name}></option>))}
+                </datalist>
+
                 <button type='submit'>Search</button>
             </form>
         </div>
@@ -46,7 +52,7 @@ const Home = () => {
             </div>
             {
                 displayCoin.slice(0,10).map((item,index)=>(
-                    <div className="table-layout" key={index}>
+                    <Link  to={`/coin/${item.id}`} className="table-layout" key={index}>
                         <p>{item.market_cap_rank}</p>
                         <div>
                             <img src={item.image}></img>
@@ -56,7 +62,7 @@ const Home = () => {
                         <p className={item.price_change_percentage_24h>0?"green":"red"}>{Math.floor(item.price_change_percentage_24h*100)/100}</p>
                         <p className='market-cap'>{currency.symbol ||"$"}{item.market_cap.toLocaleString()}</p>
 
-                    </div>
+                    </Link>
                 ))
             }
         </div>
